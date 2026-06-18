@@ -1,44 +1,65 @@
 'use client'
 
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
+import { Search } from 'lucide-react'
 import { SITE_CONFIG } from '@/lib/site-config'
 import { globalContent } from '@/editable/content/global.content'
-import { useEditableLocalAuthSession } from '@/editable/components/EditableLocalAuthForms'
 
 export function EditableFooter() {
   const year = new Date().getFullYear()
-  const { session, logout } = useEditableLocalAuthSession()
+  const distributionRoute = SITE_CONFIG.taskViews.mediaDistribution || '/media-distribution'
+  const navLinks = [
+    { label: 'Home', href: '/' },
+    { label: 'About', href: '/about' },
+    { label: 'Contact', href: '/contact' },
+    { label: 'Distribution', href: distributionRoute },
+    { label: 'Login', href: '/login' },
+    { label: 'Sign Up', href: '/signup' },
+    { label: 'Search', href: '/search' },
+  ]
 
   return (
-    <footer className="border-t-8 border-[var(--slot4-accent)] bg-black text-white">
-      <div className="mx-auto max-w-[1440px] px-4 py-14 sm:px-6 lg:px-10 lg:py-20">
-        <div className="grid gap-12 lg:grid-cols-[1.2fr_.7fr_.7fr]">
-          <div>
-            <Link href="/" className="editorial-brand text-5xl font-black text-[var(--slot4-accent)] sm:text-6xl">{SITE_CONFIG.name}</Link>
-            <p className="mt-6 max-w-xl text-sm leading-7 text-white/62">{globalContent.footer?.description || SITE_CONFIG.description}</p>
-            <form action="/signup" className="mt-8 flex max-w-xl border border-white/35">
-              <input name="email" type="email" placeholder="Email for newsroom updates" className="min-w-0 flex-1 bg-transparent px-4 py-4 text-sm outline-none placeholder:text-white/40" />
-              <button className="bg-[var(--slot4-accent)] px-5 text-xs font-black uppercase tracking-[.14em]">Subscribe</button>
-            </form>
-          </div>
-          <div>
-            <h3 className="border-b border-white/25 pb-3 text-[10px] font-black uppercase tracking-[.22em] text-white/55">Explore</h3>
-            <div className="mt-4 grid gap-3">
-              <Link href="/search" className="group inline-flex items-center justify-between text-sm font-black uppercase tracking-[.08em] hover:text-[var(--slot4-accent)]">Archive<ArrowRight className="h-4 w-4" /></Link>
-            </div>
-          </div>
-          <div>
-            <h3 className="border-b border-white/25 pb-3 text-[10px] font-black uppercase tracking-[.22em] text-white/55">Publication</h3>
-            <div className="mt-4 grid gap-3">
-              <Link href="/about" className="text-sm font-black uppercase tracking-[.08em] hover:text-[var(--slot4-accent)]">About</Link>
-              <Link href="/contact" className="text-sm font-black uppercase tracking-[.08em] hover:text-[var(--slot4-accent)]">Contact</Link>
-              {session ? <><Link href="/create" className="text-sm font-black uppercase tracking-[.08em] hover:text-[var(--slot4-accent)]">Publish</Link><button onClick={logout} className="text-left text-sm font-black uppercase tracking-[.08em] hover:text-[var(--slot4-accent)]">Logout</button></> : <><Link href="/login" className="text-sm font-black uppercase tracking-[.08em] hover:text-[var(--slot4-accent)]">Log in</Link><Link href="/signup" className="text-sm font-black uppercase tracking-[.08em] hover:text-[var(--slot4-accent)]">Subscribe</Link></>}
-            </div>
-          </div>
+    <footer className="bg-[#12356d] text-white">
+      <section className="relative overflow-hidden bg-[linear-gradient(115deg,#182270_0%,#246fc0_48%,#120048_100%)]">
+        <div className="mx-auto max-w-[1168px] px-4 py-12 sm:px-6 lg:px-0">
+          <p className="text-center text-xl uppercase tracking-wide sm:text-2xl">Receive monthly media releases and industry news</p>
+          <h2 className="mt-4 text-center text-3xl font-extrabold uppercase">Straight to your inbox</h2>
+          <form action="/signup" className="mx-auto mt-7 grid max-w-5xl overflow-hidden rounded-full bg-white text-[#172235] sm:grid-cols-[1fr_auto]">
+            <input name="email" type="email" placeholder="Enter your email" className="min-w-0 px-8 py-4 text-xl font-bold outline-none placeholder:text-[#6d7280]" />
+            <button className="bg-[var(--slot4-accent)] px-9 py-4 text-xl font-extrabold uppercase text-white">Sign up</button>
+          </form>
+          <p className="mx-auto mt-6 max-w-4xl text-center text-xs font-semibold leading-6 text-white/85">
+            We handle personal information responsibly and use it to send the updates you request.
+          </p>
+        </div>
+      </section>
+
+      <div className="mx-auto grid max-w-[1168px] gap-8 px-4 py-10 sm:px-6 lg:grid-cols-[1fr_1.2fr_.9fr] lg:px-0">
+        <div>
+          <Link href="/" className="text-3xl font-extrabold tracking-tight">{SITE_CONFIG.name}</Link>
+          <p className="mt-4 max-w-md text-sm leading-7 text-white/78">{globalContent.footer?.description || SITE_CONFIG.description}</p>
+        </div>
+        <nav className="grid gap-3 sm:grid-cols-2">
+          {navLinks.map((item) => (
+            <Link key={item.href} href={item.href} className="text-sm font-bold hover:text-white/70">{item.label}</Link>
+          ))}
+        </nav>
+        <div>
+          <h3 className="text-lg font-bold">Search the site</h3>
+          <form action="/search" className="mt-4 flex border border-white/35 bg-white/10">
+            <input name="q" placeholder="Search" className="min-w-0 flex-1 bg-transparent px-4 py-3 text-sm font-semibold outline-none placeholder:text-white/55" />
+            <button className="px-4" aria-label="Search"><Search className="h-5 w-5" /></button>
+          </form>
         </div>
       </div>
-      <div className="border-t border-white/20 px-4 py-5 text-center text-[10px] font-black uppercase tracking-[.18em] text-white/45">© {year} {SITE_CONFIG.name}. Independent media and public information.</div>
+      <div className="mx-auto flex max-w-[1168px] flex-wrap items-center justify-between gap-4 border-t border-white/20 px-4 py-5 text-xs font-semibold sm:px-6 lg:px-0">
+        <p>Copyright © {year} {SITE_CONFIG.name}.</p>
+        <div className="flex flex-wrap gap-4">
+          <Link href="/about">About</Link>
+          <Link href="/contact">Contact</Link>
+          <Link href={distributionRoute}>Distribution</Link>
+        </div>
+      </div>
     </footer>
   )
 }

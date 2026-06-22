@@ -1,12 +1,14 @@
 'use client'
 
 import Link from 'next/link'
-import { Search } from 'lucide-react'
+import { LogOut, Search } from 'lucide-react'
 import { SITE_CONFIG } from '@/lib/site-config'
 import { globalContent } from '@/editable/content/global.content'
+import { useEditableLocalAuthSession } from '@/editable/components/EditableLocalAuthForms'
 
 export function EditableFooter() {
   const year = new Date().getFullYear()
+  const { session, logout } = useEditableLocalAuthSession()
   const distributionRoute = SITE_CONFIG.taskViews.mediaDistribution || '/media-distribution'
   const navLinks = [
     { label: 'Home', href: '/' },
@@ -17,6 +19,18 @@ export function EditableFooter() {
     { label: 'Sign Up', href: '/signup' },
     { label: 'Search', href: '/search' },
   ]
+
+  if (session) {
+    return (
+      <footer className="bg-[#12356d] px-4 py-6 text-white">
+        <div className="mx-auto flex max-w-[1168px] justify-center sm:justify-end">
+          <button type="button" onClick={logout} className="inline-flex items-center gap-2 bg-white px-5 py-3 text-sm font-extrabold text-[#12356d] hover:bg-white/90">
+            <LogOut className="h-4 w-4" /> Logout
+          </button>
+        </div>
+      </footer>
+    )
+  }
 
   return (
     <footer className="bg-[#12356d] text-white">

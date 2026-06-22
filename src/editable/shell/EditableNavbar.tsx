@@ -2,21 +2,31 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
-import { Menu, Search, X } from 'lucide-react'
+import { LogOut, Menu, Search, X } from 'lucide-react'
 import { SITE_CONFIG } from '@/lib/site-config'
+import { useEditableLocalAuthSession } from '@/editable/components/EditableLocalAuthForms'
 
 export function EditableNavbar() {
   const [open, setOpen] = useState(false)
-  const distributionRoute = SITE_CONFIG.taskViews.mediaDistribution || '/media-distribution'
-  const navLinks = [
+  const { session, logout } = useEditableLocalAuthSession()
+  const publicLinks = [
     { label: 'Home', href: '/' },
     { label: 'About', href: '/about' },
     { label: 'Contact', href: '/contact' },
-    { label: 'Distribution', href: distributionRoute },
-    { label: 'Login', href: '/login' },
-    { label: 'Sign Up', href: '/signup' },
     { label: 'Search', href: '/search' },
   ]
+  const authLinks = session
+    ? [{ label: 'Create', href: '/create' }]
+    : [
+        { label: 'Login', href: '/login' },
+        { label: 'Sign Up', href: '/signup' },
+      ]
+  const navLinks = [...publicLinks, ...authLinks]
+
+  const handleLogout = () => {
+    logout()
+    setOpen(false)
+  }
 
   return (
     <header className="sticky top-0 z-50 bg-white text-[#12356d] shadow-[0_1px_0_rgba(0,0,0,.18)]">
@@ -25,10 +35,18 @@ export function EditableNavbar() {
           <Link href="/" className="text-sm font-extrabold uppercase tracking-[0.12em] hover:text-white/75">Home</Link>
           <nav className="hidden items-center gap-7 text-sm font-bold lg:flex">
             {navLinks.slice(1).map((item) => (
-              <Link key={item.href} href={item.href} className={item.label === 'Sign Up' ? 'bg-[var(--slot4-accent)] px-5 py-4 text-white hover:bg-[#bd3c20]' : 'hover:text-white/75'}>
+              <Link key={item.href} href={item.href} className={item.label === 'Sign Up' || item.label === 'Create' ? 'bg-[var(--slot4-accent)] px-5 py-4 text-white hover:bg-[#bd3c20]' : 'hover:text-white/75'}>
                 {item.label}
               </Link>
             ))}
+            {session ? (
+              <>
+                <span className="max-w-[160px] truncate text-white/85">{session.name}</span>
+                <button type="button" onClick={handleLogout} className="inline-flex items-center gap-2 hover:text-white/75">
+                  <LogOut className="h-4 w-4" /> Logout
+                </button>
+              </>
+            ) : null}
           </nav>
           <button type="button" onClick={() => setOpen((value) => !value)} className="inline-flex h-10 w-10 items-center justify-center lg:hidden" aria-label="Toggle navigation">
             {open ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
@@ -59,6 +77,12 @@ export function EditableNavbar() {
             {navLinks.map((item) => (
               <Link key={`${item.label}-${item.href}`} href={item.href} onClick={() => setOpen(false)} className="bg-white px-4 py-3 text-sm font-bold">{item.label}</Link>
             ))}
+            {session ? (
+              <>
+                <span className="bg-white px-4 py-3 text-sm font-bold text-[#12356d]">{session.name}</span>
+                <button type="button" onClick={handleLogout} className="bg-white px-4 py-3 text-left text-sm font-bold">Logout</button>
+              </>
+            ) : null}
           </div>
         </div>
       ) : null}

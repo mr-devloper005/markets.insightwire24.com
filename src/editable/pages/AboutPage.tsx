@@ -1,12 +1,9 @@
-import Link from 'next/link'
-import { ArrowRight, CheckCircle2 } from 'lucide-react'
+import { CheckCircle2 } from 'lucide-react'
 import { SITE_CONFIG } from '@/lib/site-config'
 import { pagesContent } from '@/editable/content/pages.content'
 import { EditableSiteShell } from '@/editable/shell/EditableSiteShell'
 
 export default function AboutPage() {
-  const distributionRoute = SITE_CONFIG.taskViews.mediaDistribution || '/media-distribution'
-
   return (
     <EditableSiteShell>
       <main className="bg-white text-[#172235]">
@@ -33,10 +30,6 @@ export default function AboutPage() {
               <h2 className="text-3xl font-extrabold">Clear publishing for public updates</h2>
               <div className="article-content mt-7">
                 {pagesContent.about.paragraphs.map((paragraph) => <p key={paragraph}>{paragraph}</p>)}
-              </div>
-              <div className="mt-8 flex flex-wrap gap-3">
-                <Link href={distributionRoute} className="inline-flex items-center gap-2 bg-[var(--slot4-accent)] px-6 py-3 text-sm font-bold text-white">Distribution <ArrowRight className="h-4 w-4" /></Link>
-                <Link href="/contact" className="inline-flex items-center gap-2 border border-[#12356d] px-6 py-3 text-sm font-bold text-[#12356d]">Contact</Link>
               </div>
             </article>
             <aside className="grid gap-4">

@@ -24,9 +24,9 @@ const reasons = [
   { icon: Star, title: 'Premium Service and Guidance', text: 'Give readers structured pages, safer fallbacks, and a polished route from headline to detail.', color: 'bg-[#ff5a24]' },
 ]
 
-export function EditableHomeHero({ primaryTask, primaryRoute, posts }: HomeSectionProps) {
-  const lead = posts[0]
+export function EditableHomeHero({ primaryRoute }: HomeSectionProps) {
   const heroTitle = pagesContent.home.hero.title.join(' ') || 'Unmatched Visibility. Powerful Results.'
+  const dashboardTiles = ['Plan announcement', 'Build media list', 'Review draft']
 
   return (
     <>
@@ -39,12 +39,12 @@ export function EditableHomeHero({ primaryTask, primaryRoute, posts }: HomeSecti
               Share stories, launches, commentary, and public updates through a polished media hub built for reach across channels.
             </p>
             <div className="mt-7 flex flex-wrap gap-5">
-              <Link href={primaryRoute} className={dc.button.accent}>Send a Press Release</Link>
+              <Link href="/search" className={dc.button.accent}>Send a Press Release</Link>
               <Link href="/contact" className={dc.button.secondary}>Request a Demo</Link>
             </div>
           </div>
 
-          <Link href={lead ? postHref(primaryTask, lead, primaryRoute) : primaryRoute} className="slot4-hero-screen group relative z-10 mx-auto w-full max-w-[580px]">
+          <Link href={primaryRoute} className="slot4-hero-screen group relative z-10 mx-auto w-full max-w-[580px]">
             <div className="rounded-sm bg-white p-4 text-[#172235] shadow-[0_26px_70px_rgba(0,0,0,.32)]">
               <div className="grid gap-3 lg:grid-cols-[150px_1fr]">
                 <div className="hidden border-r border-black/10 pr-3 text-xs lg:block">
@@ -54,11 +54,11 @@ export function EditableHomeHero({ primaryTask, primaryRoute, posts }: HomeSecti
                   </div>
                 </div>
                 <div>
-                  <p className="text-xs font-extrabold uppercase tracking-wide text-[#667085]">Trending topics</p>
+                  <p className="text-xs font-extrabold uppercase tracking-wide text-[#667085]">Publishing workspace</p>
                   <div className="mt-3 grid gap-3 sm:grid-cols-3">
-                    {(lead ? [lead, ...posts.slice(1, 3)] : posts.slice(0, 3)).map((post) => (
-                      <div key={post.id || post.slug} className="bg-[#f7f1ff] p-3">
-                        <p className="line-clamp-3 text-xs font-bold">{post.title}</p>
+                    {dashboardTiles.map((item) => (
+                      <div key={item} className="bg-[#f7f1ff] p-3">
+                        <p className="line-clamp-3 text-xs font-bold">{item}</p>
                         <span className="mt-3 inline-flex text-[10px] font-bold text-[#4e3aa8]">Create press release</span>
                       </div>
                     ))}
